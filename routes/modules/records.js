@@ -43,8 +43,10 @@ router.get('/:id/edit', (req, res) => {
         .lean()
         .then(record => {
           categories.map((category, index) => {
-            if (category.name === record.categoryId.name) {
-              categories[index]["isChoosed"] = true
+            if (String(category._id) === String(record.categoryId)) {
+              category.selected = true
+            } else {
+              category.selected = false
             }
           })
           res.render("edit", { categories, record })
@@ -67,7 +69,6 @@ router.put('/:id/edit', (req, res) => {
           record.date = date
           record.amount = amount
           record.categoryId = category._id
-
           return record.save()
         })
         .then(() => res.redirect("/"))

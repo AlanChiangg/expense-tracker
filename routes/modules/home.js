@@ -23,4 +23,38 @@ router.get("/", (req, res) => {
     })
 })
 
+router.get('/search', (req, res) => {
+  const userId = req.user._id
+  const categoryId = req.query.category
+  let totalAmount = 0
+
+  if (!categoryId) {
+    return res.redirect('/')
+  }
+
+  Category.find()
+    .lean()
+    .then(categories => {
+      categories.forEach(data => {
+        if (String(data._id) === categoryId) {
+          data.selected = true
+        } else {
+          data.selected = false
+        }
+      })
+      Record.find({ userId, categoryId })
+        .populate("categoryId")
+        .lean()
+        .sort({ date: "desc" })
+        .then(records => {
+          records.forEach(record => {
+            totalAmount += record.amount
+          })
+          res.render("index", { categories, records, totalAmount })
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+})
+
 module.exports = router
