@@ -4,6 +4,7 @@ const PORT = 3000
 const app = express()
 const routes = require('./routes')
 const session = require('express-session')
+const usePassport = require('./config/passport')
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -20,6 +21,8 @@ app.use(session({
   saveUninitialized: true
 }))
 app.use(express.urlencoded({ extended: true }))
+usePassport(app)
+
 app.use(routes)
 
 app.listen(PORT, () => {
