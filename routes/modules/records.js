@@ -56,7 +56,24 @@ router.get('/:id/edit', (req, res) => {
 
 // Edit
 router.put('/:id/edit', (req, res) => {
+  const userId = req.user._id
+  const _id = req.params.id
+  const { name, date, categoryName, amount } = req.body
+  Category.findOne({ name: categoryName })
+    .then(category => {
+      Record.findOne({ _id, userId })
+        .then(record => {
+          record.name = name
+          record.date = date
+          record.amount = amount
+          record.categoryId = category._id
 
+          return record.save()
+        })
+        .then(() => res.redirect("/"))
+        .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
 })
 
 module.exports = router

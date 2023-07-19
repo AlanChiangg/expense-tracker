@@ -10,7 +10,6 @@ router.get("/", (req, res) => {
     .lean()
     .then(categories => {
       Record.find({ userId })
-        // populate 要以使用 Schema.Types.ObjectId 的欄位名稱
         .populate("categoryId")
         .lean()
         .sort({ date: "desc" })
