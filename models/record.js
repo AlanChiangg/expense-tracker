@@ -14,6 +14,15 @@ const recordSchema = new Schema({
     min: 0,
     required: true
   },
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 })
 
 module.exports = mongoose.model('Record', recordSchema)
