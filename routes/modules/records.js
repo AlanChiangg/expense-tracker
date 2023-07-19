@@ -12,16 +12,14 @@ router.get('/new', (req, res) => {
     })
 })
 
-//create
+// Create
 router.post('/new', (req, res) => {
   const userId = req.user._id
   const { name, date, categoryName, amount } = req.body
   Category.findOne({ name: categoryName })
     .lean()
     .then(category => {
-      // 從 Category 取得 categoryId，再新增資料
       let categoryId = category._id
-
       Record.create({
         name,
         date,
@@ -34,12 +32,30 @@ router.post('/new', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.get('/edit', (req, res) => {
-  res.render('edit')
+router.get('/:id/edit', (req, res) => {
+  const userId = req.user._id
+  const _id = req.params.id
+  Category.find()
+    .lean()
+    .then(categories => {
+      Record.findOne({ _id, userId })
+        .populate("categoryId")
+        .lean()
+        .then(record => {
+          categories.map((category, index) => {
+            if (category.name === record.categoryId.name) {
+              categories[index]["isChoosed"] = true
+            }
+          })
+          res.render("edit", { categories, record })
+        })
+        .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
 })
 
-//edit
-router.post('/edit', (req, res) => {
+// Edit
+router.put('/:id/edit', (req, res) => {
 
 })
 

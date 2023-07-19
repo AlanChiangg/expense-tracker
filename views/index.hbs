@@ -37,10 +37,10 @@
             <i class="{{this.categoryId.icon}}" style="color: #1f2d37;"></i>
           </th>
           <td>{{this.name}}</td>
-          <td>{{this.date}}</td>
+          <td>{{dateFormat this.date "YYYY-MM-DD"}}</td>
           <td>${{this.amount}}</td>
           <td>
-            <a href="/records/edit" class="btn btn-success btn-sm">修改</a>
+            <a href="/records/{{this._id}}/edit" class="btn btn-success btn-sm">修改</a>
           </td>
           <td>
             <a href="" class="btn btn-danger btn-sm">刪除</a>

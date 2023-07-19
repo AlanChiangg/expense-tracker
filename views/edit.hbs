@@ -6,13 +6,13 @@
   </div>
 
   <div class="w-100">
-    <form action="/records/edit" method="POST">
+    <form action="/records/{{record._id}}/edit?_method=PUT" method="POST">
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">
           <span class="text-danger">*</span>
           名稱
         </span>
-        <input type="text" class="form-control" name="name" id="name" aria-label="Sizing example input"
+        <input type="text" class="form-control" name="name" id="name" value="{{record.name}}" aria-label="Sizing example input"
           aria-describedby="inputGroup-sizing-default" required>
       </div>
       <div class="input-group mb-3">
@@ -20,15 +20,14 @@
           <span class="text-danger">*</span>
           日期
         </span>
-        <input type="date" class="form-control" name="date" id="date" aria-describedby="date" aria-label="date"
-          placeholder="2020/xx/xx" required>
+        <input type="date" class="form-control" name="date" id="date" value="{{record.date}}" aria-describedby="date" aria-label="date" required>
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text" for="category">
           <span class="text-danger">*</span>
           類別
         </label>
-        <select class="form-select" name="category" id="category" required>
+        <select class="form-select" name="categoryName" id="category" required>
           <option selected>...</option>
           <option value="1">家居物業</option>
           <option value="2">交通出行</option>
@@ -42,7 +41,7 @@
           <span class="text-danger">*</span>
           金額
         </span>
-        <input type="number" class="form-control" name="amount" id="amount" aria-label="Sizing example input"
+        <input type="number" class="form-control" name="amount" id="amount" value="{{record.amount}}" aria-label="Sizing example input"
           aria-describedby="inputGroup-sizing-default" required>
       </div>
       <div class="mt-5 text-center">
