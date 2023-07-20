@@ -7,7 +7,7 @@ const Handlebars = require('handlebars')
 const hbshelpers = require('handlebars-helpers')
 const flash = require('connect-flash')
 const routes = require('./routes')
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const app = express()
 
 if (process.env.NODE_ENV !== 'production') {
