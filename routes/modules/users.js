@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../../models/user')
 const passport = require('passport')
 
+// Login
 router.get('/login', (req, res) => {
   res.render('login')
 })
@@ -12,38 +13,53 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/users/login'
 }))
 
+// Register
 router.get('/register', (req, res) => {
   res.render('register')
 })
 
 router.post('/register', async (req, res) => {
+  const { name, email, password, confirmPassword } = req.body
+  const errors = []
+  if (!name || !email || !password || !confirmPassword) {
+    errors.push({ message: '所有欄位都是必填。' })
+  }
+  if (password !== confirmPassword) {
+    errors.push({ message: '密碼與確認密碼不相符！' })
+  }
+  if (errors.length) {
+    return res.render('register', {
+      errors,
+      name,
+      email,
+      password,
+      confirmPassword
+    })
+  }
   try {
-    const { name, email, password, confirmPassword } = req.body;
     const user = await User.findOne({ email })
     if (user) {
-      console.log('User already exists.')
+      errors.push({ message: '這個 Email 已經註冊過了。' })
       return res.render('register', {
+        errors,
         name,
         email,
         password,
         confirmPassword
       })
     }
-    await User.create({
-      name,
-      email,
-      password
-    })
-    return res.redirect('/')
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send('Server Error');
+    await User.create({ name, email, password })
+    res.redirect('/')
+  } catch (err) {
+    console.log(err)
   }
 })
 
+// Logout
 router.get('/logout', (req, res, next) => {
   req.logout(err => {
     if (err) { return next(err) }
+    req.flash('success_msg', '你已經成功登出。')
     res.redirect('/users/login')
   })
 })
